@@ -1,5 +1,5 @@
 import Foundation
-
+import SwiftGD 
 struct Vector {
     let x: Double
     let y: Double
@@ -29,6 +29,7 @@ precedencegroup DotProductPrecedence {
 
 infix operator •: DotProductPrecedence // dot product
 infix operator ×: MultiplicationPrecedence // cross product
+infix operator ⊙: MultiplicationPrecedence // hadamard product
 extension Vector {
     static func + (l: Vector, r: Vector) -> Vector {
         return [l.x + r.x, l.y + r.y, l.z + r.z]
@@ -74,6 +75,13 @@ extension Vector {
           l.z * r.x - l.x * r.z,
           l.x * r.y - l.y * r.x
         ]
+    }
+    // hadamard
+    static func ⊙ (l: Vector, r: Vector) -> Vector {
+        return [l.x * r.x, l.y * r.y, l.z * r.z]
+    }
+    func color() -> Color {
+        return Color(red: self.x, green: self.y, blue: self.z, alpha: 1.0)
     }
         
 }
