@@ -11,12 +11,11 @@ class Scene {
             print("Scanlines completed: \(y) of \(image.size.height)", terminator: "\r")
             fflush(stdout)
             for x in 0..<image.size.width {
-                let r = Double(x) / Double(image.size.width-1)
-                let g = Double(image.size.height-y-1) / Double(image.size.height-1)
-                let b : Double = 0.25
+                let c : Vector =
+                  [Double(x), Double(image.size.height-y-1), 0.25] ⊙ [1/Double(image.size.width-1), 1/Double(image.size.height-1), 1]
                 image.set(
                   pixel: Point(x: x, y: y),
-                  to: Color(red: r, green: g, blue: b, alpha: 1)
+                  to: c.color()
                 )
             }
         }
