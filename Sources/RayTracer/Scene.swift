@@ -22,17 +22,19 @@ class Scene {
 
     }
     func export() {
+        #if os(Linux)
         let destinationFolder = FileManager().homeDirectoryForCurrentUser.appendingPathComponent("www")
         let destination = destinationFolder.appendingPathComponent("output.png")
         executeCmd("/usr/bin/rm", destination.path)
         image.write(to: destination)
         executeCmd(
           "/usr/bin/chmod", "-R", "a+rX", destination.path)
-
+        #endif
     }
+
 }
 
-
+#if os(Linux)
 fileprivate func executeCmd(_ cmd: String, _ args: String...) {
     let task = Process()
     task.executableURL = URL(fileURLWithPath: cmd)
@@ -40,3 +42,4 @@ fileprivate func executeCmd(_ cmd: String, _ args: String...) {
     try! task.run()
     task.waitUntilExit()
 }
+#endif
