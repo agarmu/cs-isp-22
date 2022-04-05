@@ -2,9 +2,37 @@ import SwiftGD
 import Foundation
 
 class Scene {
-    let image: Image
+    var image: Image
+    var width: Int {
+        get {
+            return image.size.width
+        }
+        set {
+            image = image.resizedTo(width: newValue) ?? image
+        }
+    }
+    var height: Int {
+        get {
+            return image.size.height
+        }
+        set {
+            image = image.resizedTo(height: newValue) ?? image
+        }
+    }
+    var aspectRatio : Double {
+        Double(width) / Double(height)
+    }
+            
     init(width: Int, height: Int) {
         image = Image(width: width, height: height)!
+    }
+    convenience init(width: Int, aspectRatio: Double) {
+        let height = Int(Double(width) / aspectRatio)
+        self.init(width: width, height: height)
+    }
+    convenience init(height: Int, aspectRatio: Double) {
+        let width = Int(Double(height) / aspectRatio)
+        self.init(width: width, height: height)
     }
     func scan() {
         for y in 0..<image.size.height {
@@ -14,7 +42,7 @@ class Scene {
                 let c : Vector =
                   [Double(x), Double(image.size.height-y-1), 0.25] ⊙ [1/Double(image.size.width-1), 1/Double(image.size.height-1), 1]
                 image.set(
-                  pixel: Point(x: x, y: y),
+                  pixel: SwiftGD.Point(x: x, y: y),
                   to: c.color()
                 )
             }

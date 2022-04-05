@@ -1,5 +1,8 @@
 import Foundation
-import SwiftGD 
+import SwiftGD
+
+typealias Point = Vector
+
 struct Vector {
     let x: Double
     let y: Double
@@ -17,7 +20,16 @@ extension Vector: ExpressibleByArrayLiteral {
 
 extension Vector: CustomStringConvertible {
     var description: String {
-        return "(\(x), \(y), \(z))"
+        return "‹\(x), \(y), \(z)›"
+    }
+    var magnitudeSquared: Double {
+        self • self
+    }
+    var magnitude: Double {
+        magnitudeSquared.squareRoot()
+    }
+    var invmag: Double {
+        invSqrt(magnitudeSquared)
     }
 }
 
@@ -30,6 +42,7 @@ precedencegroup DotProductPrecedence {
 infix operator •: DotProductPrecedence // dot product
 infix operator ×: MultiplicationPrecedence // cross product
 infix operator ⊙: MultiplicationPrecedence // hadamard product
+infix operator »: DotProductPrecedence
 extension Vector {
     static func + (l: Vector, r: Vector) -> Vector {
         return [l.x + r.x, l.y + r.y, l.z + r.z]
@@ -80,10 +93,16 @@ extension Vector {
     static func ⊙ (l: Vector, r: Vector) -> Vector {
         return [l.x * r.x, l.y * r.y, l.z * r.z]
     }
+    // create ray
+    static func » (l: Vector, r: Vector) -> Ray {
+        Ray(from: l, to: r)
+    }
     func color() -> Color {
         return Color(red: self.x, green: self.y, blue: self.z, alpha: 1.0)
     }
-        
+    func normalized() -> Self {
+        self / magnitude
+    }
 }
 
 extension Vector: Equatable {
