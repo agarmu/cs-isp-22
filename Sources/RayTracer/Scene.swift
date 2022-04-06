@@ -35,15 +35,23 @@ class Scene {
         self.init(width: width, height: height)
     }
     func scan() {
+        let viewH = 2.0
+        let viewW = viewH * aspectRatio
+        let focalLength = 1.0
+        let origin: Point = [0,0,0]
+        let horz: Vector = [viewW, 0, 0]
+        let vert: Vector = [0, viewH, 0]
+        let llcorner = origin - (horz+vert+[0, 0, focalLength*2])/2
         for y in 0..<image.size.height {
             print("Scanlines completed: \(y) of \(image.size.height)", terminator: "\r")
             fflush(stdout)
             for x in 0..<image.size.width {
-                let c : Vector =
-                  [Double(x), Double(image.size.height-y-1), 0.25] ⊙ [1/Double(image.size.width-1), 1/Double(image.size.height-1), 1]
+                let u = Double(x)/Double(image.size.width-1)
+                let v = Double(y)/Double(image.size.height-1)
+                let ray = origin » (llcorner + u*horz + v*vert - origin)
                 image.set(
                   pixel: SwiftGD.Point(x: x, y: y),
-                  to: c.color()
+                  to: ray.color().color()
                 )
             }
         }
@@ -71,3 +79,4 @@ fileprivate func executeCmd(_ cmd: String, _ args: String...) {
     task.waitUntilExit()
 }
 #endif
+

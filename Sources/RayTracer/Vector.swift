@@ -7,6 +7,11 @@ struct Vector {
     let x: Double
     let y: Double
     let z: Double
+    init(_ a: Double, _ b: Double, _ c: Double) {
+        x = a
+        y = b
+        z = c
+    }
 }
 
 extension Vector: ExpressibleByArrayLiteral {
@@ -38,11 +43,16 @@ precedencegroup DotProductPrecedence {
     lowerThan: AdditionPrecedence
     associativity: left
 }
+precedencegroup RayCreationPrecedence {
+    lowerThan: AdditionPrecedence
+    higherThan: DotProductPrecedence
+    associativity: left
+}
 
 infix operator •: DotProductPrecedence // dot product
 infix operator ×: MultiplicationPrecedence // cross product
 infix operator ⊙: MultiplicationPrecedence // hadamard product
-infix operator »: DotProductPrecedence
+infix operator »: RayCreationPrecedence
 extension Vector {
     static func + (l: Vector, r: Vector) -> Vector {
         return [l.x + r.x, l.y + r.y, l.z + r.z]
