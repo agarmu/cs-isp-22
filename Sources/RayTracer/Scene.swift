@@ -1,6 +1,8 @@
 import SwiftGD
 import Foundation
 
+let sphere = Sphere([0,0,-1], 0.5)
+
 class Scene {
     var image: Image
     var width: Int {
@@ -34,6 +36,16 @@ class Scene {
         let width = Int(Double(height) / aspectRatio)
         self.init(width: width, height: height)
     }
+    func rayColor(_ r: Ray) -> Vector {
+        if sphere.hits(ray: r) {
+            return [1, 0, 0]
+        }
+        let unit = r.direction.normalized()
+        let t = 0.5*(unit.y + 1)
+        let origin : Vector = [0,0,0]
+        return (origin » [1,1,1])[t] + (origin » [0.25,0.7,1])[1-t]
+
+    }
     func scan() {
         let viewH = 2.0
         let viewW = viewH * aspectRatio
@@ -51,7 +63,7 @@ class Scene {
                 let ray = origin » (llcorner + u*horz + v*vert - origin)
                 image.set(
                   pixel: SwiftGD.Point(x: x, y: y),
-                  to: ray.color().color()
+                  to: rayColor(ray).color()
                 )
             }
         }
