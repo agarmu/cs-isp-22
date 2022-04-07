@@ -13,7 +13,6 @@ extension Scene {
         let tempFile = tempDir.appendingPathComponent(UUID().uuidString).appendingPathExtension("ppm")
         try! ppm().data(using: .utf8)?.write(to: tempFile, options: .atomic)
         #if os(macOS)
-        print(tempFile.path)
         executeCmd("/usr/bin/open", "-a", "Preview", tempFile.path)
         #elseif os(Linux)
         let destinationFolder = FileManager().homeDirectoryForCurrentUser.appendingPathComponent("www")
