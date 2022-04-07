@@ -1,5 +1,5 @@
 import Foundation
-import SwiftGD
+import SwiftImage
 
 typealias Point = Vector
 
@@ -107,8 +107,11 @@ extension Vector {
     static func » (l: Vector, r: Vector) -> Ray {
         Ray(from: l, to: r)
     }
-    func color() -> Color {
-        return Color(red: self.x, green: self.y, blue: self.z, alpha: 1.0)
+    func color() -> RGBA<UInt8> {
+        let r = UInt8(255.999 * x)
+        let g = UInt8(255.999 * y)
+        let b = UInt8(255.99 * z)
+        return RGBA(red: r, green: g, blue: b, alpha: 255)
     }
     func normalized() -> Self {
         self / magnitude

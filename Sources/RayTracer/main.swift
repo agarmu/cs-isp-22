@@ -1,4 +1,3 @@
-import SwiftGD
 import Foundation
 
 
