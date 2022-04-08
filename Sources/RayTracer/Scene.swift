@@ -50,9 +50,8 @@ class Scene {
                 let u = Double(x)/Double(width-1)
                 let v = Double(y)/Double(height-1)
                 let ray = origin » (llcorner + u*horz + v*vert - origin)
-                image[x,y] = rayColor(ray).color()
+                image[x,height-1-y] = rayColor(ray).color()
             }
         }
-
     }
 }
