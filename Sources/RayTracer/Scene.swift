@@ -5,6 +5,9 @@ import Foundation
 class Scene {
     var image: Image<RGBA<UInt8>>
     let objects: [Hittable]
+    let samplesPerPixel: Int = 10
+    let cam: Camera
+    
     var width: Int {
         return image.width
     }
@@ -18,6 +21,7 @@ class Scene {
     init(width: Int, height: Int, objects: [Hittable] = []) {
         image = Image(width: width, height: height, pixel: .black)
         self.objects = objects
+        self.cam = Camera(vpHeight: 2.0, aspectRatio: Double(width)/Double(height))
     }
     convenience init(width: Int, aspectRatio: Double, objects: [Hittable] = []) {
         let height = Int(Double(width) / aspectRatio)
@@ -38,19 +42,16 @@ class Scene {
         }
     }
     func scan() {
-        let viewH = 2.0
-        let viewW = viewH * aspectRatio
-        let focalLength = 1.0
-        let origin: Point = [0,0,0]
-        let horz: Vector = [viewW, 0, 0]
-        let vert: Vector = [0, viewH, 0]
-        let llcorner = origin - (horz+vert+[0, 0, focalLength*2])/2
         for y in 0..<height {
             for x in 0..<width {
-                let u = Double(x)/Double(width-1)
-                let v = Double(y)/Double(height-1)
-                let ray = origin » (llcorner + u*horz + v*vert - origin)
-                image[x,height-1-y] = rayColor(ray).color()
+                var pixel: Vector = [0,0,0]
+                for _ in 0..<samplesPerPixel {
+                    let u = (Double(x) + Double.random(in: -0.5...0.5))/Double(width-1)
+                    let v = (Double(y) + Double.random(in: -0.5...0.5))/Double(height-1)
+                    let ray = cam.getRay(u, v)
+                    pixel += rayColor(ray)
+                }
+                image[x,height-1-y] = (pixel / Double(samplesPerPixel)).color()
             }
         }
     }
