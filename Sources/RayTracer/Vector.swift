@@ -123,9 +123,9 @@ extension Vector {
         Ray(from: l, to: r)
     }
     func color() -> RGBA<UInt8> {
-        let r = UInt8(255.999 * x)
-        let g = UInt8(255.999 * y)
-        let b = UInt8(255.99 * z)
+        let r = UInt8(256 * x.clamp(to: 0...0.999))
+        let g = UInt8(256 * y.clamp(to: 0...0.999))
+        let b = UInt8(256 * z.clamp(to: 0...0.999))
         return RGBA(red: r, green: g, blue: b, alpha: 255)
     }
     func normalized() -> Self {
