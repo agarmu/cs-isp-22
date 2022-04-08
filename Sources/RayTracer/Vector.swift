@@ -57,7 +57,16 @@ extension Vector {
     static func + (l: Vector, r: Vector) -> Vector {
         return [l.x + r.x, l.y + r.y, l.z + r.z]
     }
+    static func + (l: Vector, r: Double) -> Vector {
+        return [l.x + r, l.y + r, l.z + r]
+    }
+    static func + (l: Double, r: Vector) -> Vector {
+        return r + l
+    }
     static func += (l: inout Vector, r: Vector) {
+        l = l + r
+    }
+    static func += (l: inout Vector, r: Double) {
         l = l + r
     }
     static prefix func - (v: Vector) -> Vector {
@@ -66,7 +75,13 @@ extension Vector {
     static func - (l: Vector, r: Vector) -> Vector {
         return [l.x - r.x, l.y - r.y, l.z - r.z]
     }
+    static func - (l: Vector, r: Double) -> Vector {
+        return l + (-r)
+    }
     static func -= (l: inout Vector, r: Vector) {
+        l = l - r
+    }
+    static func -= (l: inout Vector, r: Double) {
         l = l - r
     }
 
