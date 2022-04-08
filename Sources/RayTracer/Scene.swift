@@ -1,10 +1,10 @@
 import SwiftImage
 import Foundation
 
-let sphere = Sphere([0,0,-1], 0.5)
 
 class Scene {
     var image: Image<RGBA<UInt8>>
+    let objects: [Hittable]
     var width: Int {
         return image.width
     }
@@ -15,26 +15,27 @@ class Scene {
         Double(width) / Double(height)
     }
             
-    init(width: Int, height: Int) {
+    init(width: Int, height: Int, objects: [Hittable] = []) {
         image = Image(width: width, height: height, pixel: .black)
+        self.objects = objects
     }
-    convenience init(width: Int, aspectRatio: Double) {
+    convenience init(width: Int, aspectRatio: Double, objects: [Hittable] = []) {
         let height = Int(Double(width) / aspectRatio)
-        self.init(width: width, height: height)
+        self.init(width: width, height: height, objects: objects)
     }
-    convenience init(height: Int, aspectRatio: Double) {
+    convenience init(height: Int, aspectRatio: Double, objects: [Hittable] = []) {
         let width = Int(Double(height) / aspectRatio)
-        self.init(width: width, height: height)
+        self.init(width: width, height: height, objects: objects)
     }
     func rayColor(_ r: Ray) -> Vector {
-        if sphere.hits(ray: r) {
-            return [1, 0, 0]
+        if let hit = r.lowestHit(objects: objects, time: 0...Double.infinity) {
+            return (1+hit.normal)/2.0
+        } else {
+            let unit = r.direction.normalized()
+            let t = 0.5*(unit.y + 1)
+            let origin : Vector = [0,0,0]
+            return (origin » [1,1,1])[t] + (origin » [0.25,0.7,1])[1-t]
         }
-        let unit = r.direction.normalized()
-        let t = 0.5*(unit.y + 1)
-        let origin : Vector = [0,0,0]
-        return (origin » [1,1,1])[t] + (origin » [0.25,0.7,1])[1-t]
-
     }
     func scan() {
         let viewH = 2.0

@@ -7,12 +7,10 @@ struct Ray {
         self.origin = origin
         self.direction = direction
     }
-    func color() -> Vector {
-        let unit = self.direction.normalized()
-        let t = 0.5*(unit.y + 1)
-        let origin : Vector = [0,0,0]
-        return (origin » [1,1,1])[t] + (origin » [0.25,0.7,1])[1-t]
-
+    func lowestHit(objects: [Hittable], time: ClosedRange<Double>) -> HitRecord? {
+        return objects
+            .compactMap {$0.hit(ray: self, time: time)}
+            .min {x,y in x.t < y.t}
     }
 }
 
