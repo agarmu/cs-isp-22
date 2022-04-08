@@ -49,7 +49,7 @@ fileprivate func executeCmd(_ cmd: String, _ args: String...) {
     }
     task.arguments = args
     if #available(macOS 10.13, *) {
-        try! task.run()
+        try? task.run()
     } else {
         // Fallback on earlier versions
         task.launch()
