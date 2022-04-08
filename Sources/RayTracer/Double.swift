@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+extension Double {
+    func clamp(to range: ClosedRange<Double>) -> Self {
+        return max(min(range.upperBound, self), range.lowerBound)
+    }
+}
