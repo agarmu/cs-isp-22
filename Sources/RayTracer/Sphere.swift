@@ -3,9 +3,10 @@ import Foundation
 class Sphere: Hittable {
     let center: Point
     let radius: Double
-    init(_ c: Point, _ r: Double) {
+	init(_ c: Point, _ r: Double, mat: Material) {
         self.center = c
         self.radius = r
+		super.init(mat)
     }
     override func hit(ray: Ray, time: ClosedRange<Double>) -> HitRecord? {
         let oc = ray.origin - center
