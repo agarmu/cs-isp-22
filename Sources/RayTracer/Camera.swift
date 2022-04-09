@@ -1,29 +1,29 @@
+import Darwin
 class Camera {
-    let aspectRatio: Double
+	var aspectRatio: Double {
+			vpWidth / vpHeight
+	}
     let vpWidth: Double
     let vpHeight: Double
-    let origin: Point = [0, 0, 0]
-    let focalLength: Double
-    lazy var horizontal: Vector = [vpWidth, 0, 0]
-    lazy var vertical: Vector = [0, vpHeight, 0]
-    lazy var lowerLeftCorner: Vector = origin - horizontal/2 - vertical/2 - [0, 0, focalLength]
-    init(vpWidth: Double, vpHeight: Double, focalLength: Double = 1.0) {
-        self.vpWidth = vpWidth
-        self.vpHeight = vpHeight
-        self.aspectRatio = vpWidth / vpHeight
-        self.focalLength = focalLength
-    }
-    init(vpWidth: Double, aspectRatio: Double, focalLength: Double = 1.0) {
-        self.vpWidth = vpWidth
-        self.aspectRatio = aspectRatio
-        self.vpHeight = vpWidth / aspectRatio
-        self.focalLength = focalLength
-    }
-    init(vpHeight: Double, aspectRatio: Double, focalLength: Double = 1.0) {
-        self.vpHeight = vpHeight
-        self.aspectRatio = aspectRatio
-        self.vpWidth = vpHeight * aspectRatio
-        self.focalLength = focalLength
+    let origin: Point
+    let horizontal: Vector
+    let vertical: Vector
+    let lowerLeftCorner: Point
+	
+	init(lookFrom: Point, lookAt: Point, vUp: Point, vFov: Double, aspectRatio: Double) {
+		let theta = degreesToRadians(vFov)
+		let h = tan(theta/2)
+		self.vpHeight = 2.0 * h
+		self.vpWidth = aspectRatio * vpHeight
+		
+		// orthogonal vectors to define coordinate system wrt camera
+		let w = (lookFrom - lookAt).normalized()
+		let u = (vUp × w).normalized()
+		let v = w × u
+		origin = lookFrom
+		horizontal = vpWidth * u
+		vertical = vpHeight * v
+		lowerLeftCorner = origin - horizontal/2 - vertical/2 - w
     }
     func getRay(_ u: Double, _ v: Double) -> Ray {
         return origin » (lowerLeftCorner + u*horizontal + v*vertical - origin)
