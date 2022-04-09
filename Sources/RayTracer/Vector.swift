@@ -150,8 +150,19 @@ extension Vector {
     static func randomOnUnitSphere() -> Self {
         Self.randomInUnitSphere().normalized()
     }
+	func reflect(normalTo n: Vector) -> Vector {
+		return self - 2*(self•n)*n
+	}
 }
-
+extension Vector {
+	static fileprivate let maxDiff = pow(10.0, -8.0)
+	func nearZero() -> Bool {
+		return
+			(abs(x) < Vector.maxDiff) &&
+			(abs(y) < Vector.maxDiff) &&
+			(abs(z) < Vector.maxDiff)
+	}
+}
 extension Vector: Equatable {
     static func == (l: Vector, r: Vector) -> Bool {
         return l.x == r.x && l.y == r.y && l.z == r.z
