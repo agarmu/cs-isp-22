@@ -13,23 +13,25 @@ struct HitRecord {
     let t: Double
     let frontFace: Bool
     let object: Hittable
-    init(p: Point, normal: Vector, t: Double, frontFace: Bool, object: Hittable) {
-        self.p = p
-        self.normal = normal
-        self.t = t
-        self.frontFace = frontFace
-        self.object = object
-    }
+	let ray: Ray
     init(ray: Ray, t: Double, outwardNormal: Vector, object: Hittable) {
+		self.ray = ray
         self.p = ray[t]
         self.frontFace = (outwardNormal • ray.direction) < 0
         normal = (frontFace ? 1: -1) * outwardNormal
         self.t = t
         self.object = object
     }
+	func scatter() -> (attenuation: Color, Ray?) {
+		return object.material.scatter(hitRecord: self)
+	}
 }
 
 class Hittable {
+	let material: Material
+	init(_ m: Material) {
+		self.material = m
+	}
 	func hit(ray: Ray, time: ClosedRange<Double>) -> HitRecord? {
 		fatalError("hitting must be overriden for each hittable")
 	}
