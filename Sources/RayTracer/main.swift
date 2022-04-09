@@ -1,6 +1,6 @@
 import Foundation
 
-
+print("starting")
 let scene = Scene(
     width: 400,
     aspectRatio: 16/9,

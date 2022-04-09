@@ -131,6 +131,24 @@ extension Vector {
     func normalized() -> Self {
         self / magnitude
     }
+    static func random(in range: ClosedRange<Double>) -> Self {
+        return [Double.random(in: range), Double.random(in: range), Double.random(in: range)]
+    }
+    func gamma(_ value: Double) -> Self {
+        let exponent = 1 / value
+        return [pow(self.x, exponent), pow(self.y, exponent), pow(self.z, exponent)]
+    }
+    static func randomInUnitSphere() -> Self {
+        var v: Vector
+        repeat {
+            v = Vector.random(in: 0...1)
+        } while v.magnitudeSquared > 1
+        return v
+    }
+
+    static func randomOnUnitSphere() -> Self {
+        Self.randomInUnitSphere().normalized()
+    }
 }
 
 extension Vector: Equatable {

@@ -5,7 +5,8 @@ import Foundation
 class Scene {
     var image: Image<RGBA<UInt8>>
     let objects: [Hittable]
-    let samplesPerPixel: Int = 10
+    let samplesPerPixel: Int = 5
+    let maxDepth: Int = 5
     let cam: Camera
     
     var width: Int {
@@ -31,9 +32,12 @@ class Scene {
         let width = Int(Double(height) / aspectRatio)
         self.init(width: width, height: height, objects: objects)
     }
-    func rayColor(_ r: Ray) -> Vector {
-        if let hit = r.lowestHit(objects: objects, time: 0...Double.infinity) {
-            return (1+hit.normal)/2.0
+    func rayColor(_ r: Ray, depth: Int) -> Vector {
+        if depth <= 0 {
+            return [0, 0, 0]
+        } else if let hit = r.lowestHit(objects: objects, time: 0.001...Double.infinity) {
+            let target = hit.p » (hit.normal + Vector.randomOnUnitSphere())
+            return 0.5 * rayColor(target, depth: depth-1)
         } else {
             let unit = r.direction.normalized()
             let t = 0.5*(unit.y + 1)
@@ -43,15 +47,17 @@ class Scene {
     }
     func scan() {
         for y in 0..<height {
+                print("Scanlines left: \(height-1-y)", terminator: "\r")
+                fflush(stdout)
             for x in 0..<width {
                 var pixel: Vector = [0,0,0]
                 for _ in 0..<samplesPerPixel {
                     let u = (Double(x) + Double.random(in: -0.5...0.5))/Double(width-1)
                     let v = (Double(y) + Double.random(in: -0.5...0.5))/Double(height-1)
                     let ray = cam.getRay(u, v)
-                    pixel += rayColor(ray)
+                    pixel += rayColor(ray, depth: self.maxDepth)
                 }
-                image[x,height-1-y] = (pixel / Double(samplesPerPixel)).color()
+                image[x,height-1-y] = (pixel / Double(samplesPerPixel)).gamma(2).color()
             }
         }
     }
