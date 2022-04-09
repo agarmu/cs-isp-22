@@ -8,7 +8,6 @@ class Scene {
     let samplesPerPixel: Int = 100
     let maxDepth: Int = 50
     let cam: Camera
-    
     var width: Int {
         return image.width
     }

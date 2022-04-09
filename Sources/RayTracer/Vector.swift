@@ -150,6 +150,13 @@ extension Vector {
     static func randomOnUnitSphere() -> Self {
         Self.randomInUnitSphere().normalized()
     }
+	static func randomInUnitDisc() -> Self {
+		var v: Vector
+		repeat {
+			v = [Double.random(in: -1...1), Double.random(in: -1...1), 0]
+		} while v.magnitudeSquared > 1
+		return v
+	}
 	func reflect(normalTo n: Vector) -> Vector {
 		return self - 2*(self•n)*n
 	}

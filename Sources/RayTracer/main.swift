@@ -4,7 +4,7 @@ print("starting")
 let scene = Scene(
     width: 400,
     aspectRatio: 16/9,
-	cam: Camera(lookFrom: [-2, 2, 1], lookAt: [0, 0, -1], vUp: Vector(0, 1, 0).normalized(), vFov: 20, aspectRatio: 16.0/9.0),
+	cam: Camera(lookFrom: [3, 3, 2], lookAt: [0, 0, -1], vUp: Vector(0, 1, 0).normalized(), vFov: 20, aspectRatio: 16.0/9.0, aperture: 2.0),
     objects: [
 		// ground
 		Sphere([0,-100.5,-1], 100, mat: Lambertian([0.8, 0.8, 0])),
