@@ -8,7 +8,7 @@
 import Foundation
 
 class Material {
-	func scatter(rayIn: Ray, hitRecord: HitRecord) -> (attenuation: Color, Ray?) {
+	func scatter(hitRecord: HitRecord) -> (attenuation: Color, Ray?) {
         fatalError("scattering of rays must be overriden for each material")
     }
 }
