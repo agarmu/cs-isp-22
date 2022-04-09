@@ -5,8 +5,8 @@ import Foundation
 class Scene {
     var image: Image<RGBA<UInt8>>
     let objects: [Hittable]
-    let samplesPerPixel: Int = 5
-    let maxDepth: Int = 5
+    let samplesPerPixel: Int = 10
+    let maxDepth: Int = 50
     let cam: Camera
     
     var width: Int {
@@ -36,8 +36,12 @@ class Scene {
         if depth <= 0 {
             return [0, 0, 0]
         } else if let hit = r.lowestHit(objects: objects, time: 0.001...Double.infinity) {
-            let target = hit.p » (hit.normal + Vector.randomOnUnitSphere())
-            return 0.5 * rayColor(target, depth: depth-1)
+			let (attenuation, scattered) = hit.scatter()
+			if let scattered = scattered {
+				return attenuation ⊙ rayColor(scattered, depth: depth-1)
+			} else {
+				return [0,0,0]
+			}
         } else {
             let unit = r.direction.normalized()
             let t = 0.5*(unit.y + 1)
