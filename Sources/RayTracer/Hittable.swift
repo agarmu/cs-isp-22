@@ -29,6 +29,8 @@ struct HitRecord {
     }
 }
 
-protocol Hittable {
-    func hit(ray: Ray, time: ClosedRange<Double>) -> HitRecord?
+class Hittable {
+	func hit(ray: Ray, time: ClosedRange<Double>) -> HitRecord? {
+		fatalError("hitting must be overriden for each hittable")
+	}
 }

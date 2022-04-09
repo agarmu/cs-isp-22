@@ -7,7 +7,7 @@ class Sphere: Hittable {
         self.center = c
         self.radius = r
     }
-    func hit(ray: Ray, time: ClosedRange<Double>) -> HitRecord? {
+    override func hit(ray: Ray, time: ClosedRange<Double>) -> HitRecord? {
         let oc = ray.origin - center
         let a = ray.direction.magnitudeSquared
         let hb = oc • ray.direction
