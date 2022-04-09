@@ -153,6 +153,16 @@ extension Vector {
 	func reflect(normalTo n: Vector) -> Vector {
 		return self - 2*(self•n)*n
 	}
+	func refract(normalTo n: Vector, refractionRatio: Double) -> Vector? {
+		let cosTheta = min(-self • n, 1.0)
+		let sinTheta = sqrt(1.0 - pow(cosTheta, 2.0))
+		if refractionRatio * sinTheta > 1.0 {
+			return nil
+		}
+		let rOutPerp = refractionRatio * (self + cosTheta*n)
+		let rOutPar = -sqrt((1.0 - rOutPerp.magnitudeSquared)) * n
+		return rOutPerp + rOutPar
+	}
 }
 extension Vector {
 	static fileprivate let maxDiff = pow(10.0, -8.0)
