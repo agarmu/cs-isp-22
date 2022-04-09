@@ -9,7 +9,7 @@ import Foundation
 
 class Lambertian: Material {
     let albedo: Color
-    init(albedo: Color) {
+    init(_ albedo: Color) {
         self.albedo = albedo
     }
     override func scatter(hitRecord: HitRecord) -> (attenuation: Color, Ray?) {
