@@ -5,7 +5,7 @@ import Foundation
 class Scene {
     var image: Image<RGBA<UInt8>>
     let objects: [Hittable]
-    let samplesPerPixel: Int = 10
+    let samplesPerPixel: Int = 100
     let maxDepth: Int = 50
     let cam: Camera
     
@@ -19,18 +19,18 @@ class Scene {
         Double(width) / Double(height)
     }
             
-    init(width: Int, height: Int, objects: [Hittable] = []) {
+	init(width: Int, height: Int, cam: Camera, objects: [Hittable] = []) {
         image = Image(width: width, height: height, pixel: .black)
         self.objects = objects
-        self.cam = Camera(vpHeight: 2.0, aspectRatio: Double(width)/Double(height))
+		self.cam = cam
     }
-    convenience init(width: Int, aspectRatio: Double, objects: [Hittable] = []) {
+	convenience init(width: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = []) {
         let height = Int(Double(width) / aspectRatio)
-        self.init(width: width, height: height, objects: objects)
+		self.init(width: width, height: height, cam: cam, objects: objects)
     }
-    convenience init(height: Int, aspectRatio: Double, objects: [Hittable] = []) {
+	convenience init(height: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = []) {
         let width = Int(Double(height) / aspectRatio)
-        self.init(width: width, height: height, objects: objects)
+		self.init(width: width, height: height, cam: cam, objects: objects)
     }
     func rayColor(_ r: Ray, depth: Int) -> Vector {
         if depth <= 0 {
