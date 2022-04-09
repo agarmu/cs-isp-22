@@ -2,6 +2,7 @@ import Foundation
 import SwiftImage
 
 typealias Point = Vector
+typealias Color = Vector
 
 struct Vector {
     let x: Double
