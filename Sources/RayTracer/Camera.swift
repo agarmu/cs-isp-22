@@ -32,7 +32,7 @@ class Camera {
     func getRay(_ m: Double, _ n: Double) -> Ray {
         return (origin) »
 		(
-			(m-0.5)*horizontal + (n-0.5)*vertical
+			(m-0.5)*horizontal + (n-0.5)*vertical - w
 		)
     }
 }
