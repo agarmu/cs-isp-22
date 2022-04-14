@@ -60,5 +60,7 @@ class Scene {
 			fputs("Scanlines left: \(y)\u{001B}[0K\r", stderr)
 			fflush(stderr)
         }
+        fputs("Done scanning \(height) lines.\u{001B}[0K\n", stderr)
+        fflush(stderr)
     }
 }
