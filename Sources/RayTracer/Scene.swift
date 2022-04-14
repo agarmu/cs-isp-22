@@ -3,7 +3,7 @@ import Foundation
 
 class Scene {
     let objects: [Hittable]
-    let samplesPerPixel: Int = 10
+    let samplesPerPixel: Int
     let maxDepth: Int = 50
     let cam: Camera
     let width: Int
@@ -12,19 +12,25 @@ class Scene {
         Double(width) / Double(height)
     }
             
-	init(width: Int, height: Int, cam: Camera, objects: [Hittable] = []) {
+    init(width: Int, height: Int, cam: Camera, objects: [Hittable] = [], export: Bool) {
         self.width = width
         self.height = height
         self.objects = objects
 		self.cam = cam
+        if export {
+            self.samplesPerPixel = 10
+        } else {
+            self.samplesPerPixel = 1
+        }
+
     }
-	convenience init(width: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = []) {
+    convenience init(width: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = [], export: Bool) {
         let height = Int(Double(width) / aspectRatio)
-		self.init(width: width, height: height, cam: cam, objects: objects)
+        self.init(width: width, height: height, cam: cam, objects: objects, export: export)
     }
-	convenience init(height: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = []) {
+    convenience init(height: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = [], export: Bool) {
         let width = Int(Double(height) / aspectRatio)
-		self.init(width: width, height: height, cam: cam, objects: objects)
+        self.init(width: width, height: height, cam: cam, objects: objects, export: export)
     }
     func rayColor(_ r: Ray, depth: Int) -> Vector {
         if depth <= 0 {

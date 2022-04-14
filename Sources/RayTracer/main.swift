@@ -2,11 +2,18 @@ import Foundation
 
 var rng = SeededRng(seed: 4677910311448980902)
 
+var export: Bool = false
+if let v = ProcessInfo.processInfo.environment["EXPORT"] {
+    export = v != ""
+}
+
+
 let scene = Scene(
-    width: 600,
+    width: export ? 600: 300,
     aspectRatio: 3/2,
-	cam: Camera(lookFrom: [13, 2, 3], lookAt: [0, 0, 0], vUp: Vector(0, 1, 0), vFov: 20, aspectRatio: 3/2, aperture: 0.1, focalDistance: 10),
-    objects: generateObjects()
+	cam: Camera(lookFrom: [13, 2, 3], lookAt: [0, 0, 0], vUp: Vector(0, 1, 0), vFov: 20, aspectRatio: 3/2, aperture: 0.01, focalDistance: 10),
+    objects: generateObjects(),
+    export: export
 )
 scene.scan()
 
@@ -14,7 +21,6 @@ scene.scan()
 func generateObjects() -> [Hittable] {
 	let ground = Lambertian([0.5, 0.5, 0.5])
 	let glass = Dielectric(indexOfRefraction: 3/2)
-	let glassInner = Dielectric(indexOfRefraction: 2/3)
 	var objects: [Hittable] = (-11..<11).flatMap { a in
 		(-11..<11).map { b in
 			let material: Material
@@ -25,14 +31,16 @@ func generateObjects() -> [Hittable] {
 			)
 			// determine material
             let d = Double.random(in: 0...1, using: &rng)
-			if d < 0.8 {
+			if d < 0.5 {
 				// diffuse
                 let albedo = Color.random(in: 0...1, using: &rng) ⊙ Color.random(in: 0...1, using: &rng)
 				material = Lambertian(albedo)
-			} else if d < 0.95 {
+			} else if d < 0.7 {
 				// metal
                 let fuzz = Double.random(in: 0...0.5, using: &rng)
-                let albedo = Color.random(in: 0.5...1, using: &rng)
+                let albedo = (
+                    Color.random(in: 0...1, using: &rng) ⊙ Color.random(in: 0...1, using: &rng)
+                ) * 0.5 + 0.5
 				material = Metal(albedo: albedo, fuzz: fuzz)
 			} else {
 				// dielectric
@@ -48,7 +56,6 @@ func generateObjects() -> [Hittable] {
 		Sphere([4,1,0], 1, mat: Metal(albedo: [0.7, 0.6, 0.5], fuzz: 0)),
 		//   	hollow glass
 		Sphere([0, 1, 0], 1, mat: glass), // outer
-		Sphere([0, 1, 0], 0.9, mat: glassInner), // inner
 		//   	lambertian - brown
 		Sphere([-4, 1, 0], 1, mat: Lambertian([0.4, 0.2, 0.1]))
 	])
