@@ -1,4 +1,4 @@
-import Darwin
+import Foundation
 class Camera {
 	var aspectRatio: Double {
 			vpWidth / vpHeight
