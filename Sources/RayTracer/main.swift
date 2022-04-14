@@ -27,7 +27,8 @@ func generateObjects() -> [Hittable] {
 			let center = Point(
                 Double(a) + Double.random(in: 0...0.9, using: &rng),
 				0.2,
-                Double(b) + Double.random(in: 0...0.9, using: &rng)
+                // declamp to avoid intersecting big large spheres
+                (Double(b) + Double.random(in: 0...0.9, using: &rng)).declamp(from: -1...1)
 			)
 			// determine material
             let d = Double.random(in: 0...1, using: &rng)
