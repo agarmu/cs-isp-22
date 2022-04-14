@@ -54,6 +54,7 @@ class Scene {
                     let ray = cam.getRay(u, v)
                     pixel += rayColor(ray, depth: self.maxDepth)
                 }
+                pixel /= max(1.0, Double(samplesPerPixel))
                 pixel = pixel.gamma(2)
                 print(pixel.ppm())
             }
