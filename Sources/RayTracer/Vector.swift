@@ -123,9 +123,9 @@ extension Vector {
         Ray(from: l, to: r)
     }
     func ppm() -> String {
-        let r = UInt((65536 * x).clamp(to: 0...0.65535))
-        let g = UInt((65536 * y).clamp(to: 0...0.65535))
-        let b = UInt((65536 * z).clamp(to: 0...0.65535))
+        let r = UInt((65536 * x).clamp(to: 0...65535))
+        let g = UInt((65536 * y).clamp(to: 0...65535))
+        let b = UInt((65536 * z).clamp(to: 0...65535))
         return "\(r) \(g) \(b)"
     }
     func normalized() -> Self {
