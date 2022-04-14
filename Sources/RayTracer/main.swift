@@ -1,15 +1,14 @@
 import Foundation
 
-print("starting")
+var rng = SeededRng(seed: 4677910311448980902)
+
 let scene = Scene(
-    width: 1200,
+    width: 300,
     aspectRatio: 3/2,
 	cam: Camera(lookFrom: [13, 2, 3], lookAt: [0, 0, 0], vUp: Vector(0, 1, 0), vFov: 20, aspectRatio: 3/2, aperture: 0.1, focalDistance: 10),
     objects: generateObjects()
 )
 scene.scan()
-scene.export()
-
 
 
 func generateObjects() -> [Hittable] {
@@ -20,20 +19,20 @@ func generateObjects() -> [Hittable] {
 		(-11..<11).map { b in
 			let material: Material
 			let center = Point(
-				Double(a) + Double.random(in: 0...0.9),
+                Double(a) + Double.random(in: 0...0.9, using: &rng),
 				0.2,
-				Double(b) + Double.random(in: 0...0.9)
+                Double(b) + Double.random(in: 0...0.9, using: &rng)
 			)
 			// determine material
-			let d = Double.random(in: 0...1)
+            let d = Double.random(in: 0...1, using: &rng)
 			if d < 0.8 {
 				// diffuse
-				let albedo = Color.random(in: 0...1) ⊙ Color.random(in: 0...1)
+                let albedo = Color.random(in: 0...1, using: &rng) ⊙ Color.random(in: 0...1, using: &rng)
 				material = Lambertian(albedo)
 			} else if d < 0.95 {
 				// metal
-				let fuzz = Double.random(in: 0...0.5)
-				let albedo = Color.random(in: 0.5...1)
+                let fuzz = Double.random(in: 0...0.5, using: &rng)
+                let albedo = Color.random(in: 0.5...1, using: &rng)
 				material = Metal(albedo: albedo, fuzz: fuzz)
 			} else {
 				// dielectric

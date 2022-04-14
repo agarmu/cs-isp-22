@@ -1,5 +1,4 @@
 import Foundation
-import SwiftImage
 
 typealias Point = Vector
 typealias Color = Vector
@@ -123,17 +122,24 @@ extension Vector {
     static func » (l: Vector, r: Vector) -> Ray {
         Ray(from: l, to: r)
     }
-    func color() -> RGBA<UInt8> {
+    func ppm() -> String {
         let r = UInt8(256 * x.clamp(to: 0...0.999))
         let g = UInt8(256 * y.clamp(to: 0...0.999))
         let b = UInt8(256 * z.clamp(to: 0...0.999))
-        return RGBA(red: r, green: g, blue: b, alpha: 255)
+        return "\(r) \(g) \(b)"
     }
     func normalized() -> Self {
         self / magnitude
     }
     static func random(in range: ClosedRange<Double>) -> Self {
         return [Double.random(in: range), Double.random(in: range), Double.random(in: range)]
+    }
+    static func random<T: RandomNumberGenerator>(in range: ClosedRange<Double>, using rng: inout T) -> Self {
+        return [
+            Double.random(in: range, using: &rng),
+            Double.random(in: range, using: &rng),
+            Double.random(in: range, using: &rng),
+        ]
     }
     func gamma(_ value: Double) -> Self {
         let exponent = 1 / value

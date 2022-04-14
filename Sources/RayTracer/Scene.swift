@@ -1,25 +1,20 @@
 import SwiftImage
 import Foundation
 
-
 class Scene {
-    var image: Image<RGBA<UInt8>>
     let objects: [Hittable]
-    let samplesPerPixel: Int = 1000
-    let maxDepth: Int = 100
+    let samplesPerPixel: Int = 10
+    let maxDepth: Int = 50
     let cam: Camera
-    var width: Int {
-        return image.width
-    }
-    var height: Int {
-        return image.height
-    }
+    let width: Int
+    let height: Int
     var aspectRatio : Double {
         Double(width) / Double(height)
     }
             
 	init(width: Int, height: Int, cam: Camera, objects: [Hittable] = []) {
-        image = Image(width: width, height: height, pixel: .black)
+        self.width = width
+        self.height = height
         self.objects = objects
 		self.cam = cam
     }
@@ -49,8 +44,8 @@ class Scene {
         }
     }
     func scan() {
-		let start = Date()
-        for y in 0..<height {
+        print("P3\n\(width) \(height)\n255")
+        for y in (0..<height).reversed() {
             for x in 0..<width {
                 var pixel: Vector = [0,0,0]
                 for _ in 0..<samplesPerPixel {
@@ -59,11 +54,11 @@ class Scene {
                     let ray = cam.getRay(u, v)
                     pixel += rayColor(ray, depth: self.maxDepth)
                 }
-                image[x,height-1-y] = (pixel / Double(samplesPerPixel)).gamma(2).color()
+                pixel = pixel.gamma(2)
+                print(pixel.ppm())
             }
-			print("Scanlines left: \(height-1-y) — approx. \(Double(y-height)*start.timeIntervalSinceNow/Double(y+1))s needed.", terminator: "\u{001B}[0K\r")
-			fflush(stdout)
+			fputs("Scanlines left: \(y)\u{001B}[0K\r", stderr)
+			fflush(stderr)
         }
-		print("\nFinished scanning \(height*width) pixels in \(start.timeIntervalSinceNow * -1) seconds.")
     }
 }
