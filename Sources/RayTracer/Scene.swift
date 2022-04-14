@@ -50,7 +50,7 @@ class Scene {
         }
     }
     func scan() {
-        print("P3\n\(width) \(height)\n255")
+        print("P3\n\(width) \(height)\n65535")
         for y in (0..<height).reversed() {
             for x in 0..<width {
                 var pixel: Vector = [0,0,0]
