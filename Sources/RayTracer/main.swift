@@ -3,7 +3,7 @@ import Foundation
 var rng = SeededRng(seed: 4677910311448980902)
 
 let scene = Scene(
-    width: 300,
+    width: 600,
     aspectRatio: 3/2,
 	cam: Camera(lookFrom: [13, 2, 3], lookAt: [0, 0, 0], vUp: Vector(0, 1, 0), vFov: 20, aspectRatio: 3/2, aperture: 0.1, focalDistance: 10),
     objects: generateObjects()
