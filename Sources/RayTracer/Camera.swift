@@ -9,7 +9,7 @@ class Camera {
     let horizontal: Vector
     let vertical: Vector
 	let u, v, w: Vector
-	init(lookFrom: Point, lookAt: Point, vUp: Point, vFov: Double, aspectRatio: Double, aperture: Double) {
+	init(lookFrom: Point, lookAt: Point, vUp: Point, vFov: Double, aspectRatio: Double) {
 		let theta = degreesToRadians(vFov)
 		let h = tan(theta/2)
 		self.vpHeight = 2.0 * h

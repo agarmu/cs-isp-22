@@ -11,7 +11,7 @@ if let v = ProcessInfo.processInfo.environment["EXPORT"] {
 let scene = Scene(
     width: export ? 900: 300,
     aspectRatio: 3/2,
-	cam: Camera(lookFrom: [13, 2, 3], lookAt: [0, 0, 0], vUp: Vector(0, 1, 0), vFov: 20, aspectRatio: 3/2, aperture: 0.001),
+	cam: Camera(lookFrom: [13, 2, 3], lookAt: [0, 0, 0], vUp: Vector(0, 1, 0), vFov: 20, aspectRatio: 3/2),
     objects: generateObjects(),
     export: export
 )
