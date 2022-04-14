@@ -24,12 +24,15 @@ func generateObjects() -> [Hittable] {
 	var objects: [Hittable] = (-11..<11).flatMap { a in
 		(-11..<11).map { b in
 			let material: Material
-			let center = Point(
+			var center = Point(
                 Double(a) + Double.random(in: 0...0.9, using: &rng),
 				0.2,
-                // declamp to avoid intersecting big large spheres
-                (Double(b) + Double.random(in: 0...0.9, using: &rng)).declamp(from: -1...1)
+                (Double(b) + Double.random(in: 0...0.9, using: &rng))
 			)
+            // declamp z-axis to avoid intersecting big large spheres
+            if (-5...5).contains(center.x) {
+                center = [center.x, center.y, center.z.declamp(from: -1...1)]
+            }
 			// determine material
             let d = Double.random(in: 0...1, using: &rng)
 			if d < 0.5 {
