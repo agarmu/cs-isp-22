@@ -3,7 +3,7 @@ import Foundation
 
 class Scene {
     let objects: [Hittable]
-    let samplesPerPixel: Int = 1
+    let samplesPerPixel: Int
     let maxDepth: Int = 50
     let cam: Camera
     let width: Int
@@ -17,6 +17,11 @@ class Scene {
         self.height = height
         self.objects = objects
 		self.cam = cam
+        if export {
+            self.samplesPerPixel = 10
+        } else {
+            self.samplesPerPixel = 1
+        }
 
     }
     convenience init(width: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = [], export: Bool) {
