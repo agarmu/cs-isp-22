@@ -14,13 +14,16 @@ struct HitRecord {
     let frontFace: Bool
     let object: Hittable
 	let ray: Ray
-    init(ray: Ray, t: Double, outwardNormal: Vector, object: Hittable) {
+    // Surface Coordinates for texturing
+    let surfaceCoordinates : (u: Double, v: Double)
+    init(ray: Ray, t: Double, outwardNormal: Vector, object: Hittable, surfaceCoordinates: (u: Double, v: Double)) {
 		self.ray = ray
         self.p = ray[t]
         self.frontFace = (outwardNormal • ray.direction) < 0
         normal = (frontFace ? 1: -1) * outwardNormal
         self.t = t
         self.object = object
+        self.surfaceCoordinates = surfaceCoordinates
     }
 	func scatter() -> (attenuation: Color, Ray?) {
 		return object.material.scatter(hitRecord: self)
