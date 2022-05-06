@@ -191,3 +191,7 @@ extension Vector: Equatable {
         return l.x == r.x && l.y == r.y && l.z == r.z
     }
 }
+
+func lerp(_ a: Vector, _ b: Vector, by amount: Double) -> Vector {
+    return a * (1-amount) + b * amount
+}

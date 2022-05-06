@@ -3,17 +3,24 @@ import Foundation
 
 class ImageTexture: Texture {
     let image: Image
-    init?(_ imageURL: URL) {
+    let uTile: Double
+    let vTile: Double
+    init?(_ imageURL: URL, uTile: Double = 1, vTile: Double = 1) {
         guard let img = Image(url: imageURL) else {
             return nil
         }
         image = img
+        self.uTile = uTile
+        self.vTile = vTile
     }
     override func value(_ hitRecord: HitRecord) -> Color {
-        // clamp u, v to [0, 1]
+        // clamp u, v to [0, 1] and multiply by tilings
         var (u, v) = hitRecord.surfaceCoordinates
-        u = u.clamp(to: 0...1)
-        v = v.clamp(to: 0...1)
+        u = u.clamp(to: 0...1) * vTile
+        v = v.clamp(to: 0...1) * uTile
+        // modulus u and v by 1 by taking floating part to get 'repeating' tiling
+        u = modf(u).1
+        v = modf(v).1
         // convert to 'image' coordinates
         let i = min(
             image.size.width-1,

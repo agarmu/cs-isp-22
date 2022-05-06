@@ -1,10 +1,10 @@
 import SwiftImage
 import Foundation
 
-class Scene {
+struct Scene {
     let objects: [Hittable]
     let samplesPerPixel: Int
-    let maxDepth: Int = 50
+    let maxDepth: Int = 16
     let cam: Camera
     let width: Int
     let height: Int
@@ -18,17 +18,17 @@ class Scene {
         self.objects = objects
 		self.cam = cam
         if export {
-            self.samplesPerPixel = 10
+            self.samplesPerPixel = 100
         } else {
-            self.samplesPerPixel = 1
+            self.samplesPerPixel = 10
         }
 
     }
-    convenience init(width: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = [], export: Bool) {
+    init(width: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = [], export: Bool) {
         let height = Int(Double(width) / aspectRatio)
         self.init(width: width, height: height, cam: cam, objects: objects, export: export)
     }
-    convenience init(height: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = [], export: Bool) {
+    init(height: Int, aspectRatio: Double, cam: Camera, objects: [Hittable] = [], export: Bool) {
         let width = Int(Double(height) / aspectRatio)
         self.init(width: width, height: height, cam: cam, objects: objects, export: export)
     }
@@ -45,8 +45,7 @@ class Scene {
         } else {
             let unit = r.direction.normalized()
             let t = 0.5*(unit.y + 1)
-            let origin : Vector = [0,0,0]
-            return (origin » [1,1,1])[t] + (origin » [0.25,0.7,1])[1-t]
+            return lerp([0.25,0.7,1], [1,1,1], by: t)
         }
     }
     func scan() {

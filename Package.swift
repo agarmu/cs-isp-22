@@ -17,7 +17,9 @@ let package = Package(
             name: "RayTracer",
             dependencies: ["SwiftGD"],
             resources: [
-                .process("Resources/earth.jpg")
+                .process("Resources/earth.jpg"),
+                .process("Resources/darkwood.jpg"),
+                .process("Resources/lightwood.jpg")
             ]
         ),
         .testTarget(
