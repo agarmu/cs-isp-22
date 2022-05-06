@@ -4,7 +4,7 @@ import Foundation
 struct Scene {
     let objects: [Hittable]
     let samplesPerPixel: Int
-    let maxDepth: Int = 16
+    let maxDepth: Int = 30
     let cam: Camera
     let width: Int
     let height: Int
@@ -18,9 +18,9 @@ struct Scene {
         self.objects = objects
 		self.cam = cam
         if export {
-            self.samplesPerPixel = 100
+            self.samplesPerPixel = 300
         } else {
-            self.samplesPerPixel = 10
+            self.samplesPerPixel = 1
         }
 
     }
