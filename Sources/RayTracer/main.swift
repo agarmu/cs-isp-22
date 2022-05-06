@@ -1,6 +1,6 @@
 import Foundation
 
-// seeded rng for multiple renderings with single
+// seeded rng for multiple renderings with single 'randomly' generated layout of objects
 var rng = SeededRng(seed: 4677910311448980902)
 
 // if the export setting is turned on, the scene will be larger and require more rays per pixel
