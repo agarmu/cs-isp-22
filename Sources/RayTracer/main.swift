@@ -21,11 +21,12 @@ else {
     fatalError("Unable to load image(s)")
     }
 // create checkered texture using wood textures
-let checkerTexture = CheckerTexture(lightWood, darkWood, delta: 4.0)
-
+let checkerTexture = CheckerTexture(lightWood, darkWood, delta: 1.75)
+let ior = 2.5
 // create scene
-let pt = ([1.5, 0, 1.5] + [0,0,-1])/2.0 + [0, -1, 0]
-let org = Vector(8, 2, -10)
+let sphereCenter: Vector = [3.0, 0, 0]
+let pt: Vector = [0,0,0]
+let org = Vector(0, 4, -14)
 let scene = Scene(
     width: 600,
     aspectRatio: 3/2,
@@ -50,8 +51,11 @@ func generateObjects() -> [Hittable] {
        // dielectric = refracts light, indexOfRefraction determines to what extent (using Snell's Law)
         Sphere([0,0,2], 1.0, mat:  Metal([250,181,237] / 255.0, fuzz: 0.3)),
        // textured lambertian surface uses surface coordinates (i.e. latitude/longitude) and maps onto image to create an 'earth' texture
-       Sphere([0,0,-1], 1.0, mat: Lambertian(earthTexture)),
-       Sphere([2.0, 0, 0], 1.0, mat: Dielectric(indexOfRefraction: 2.5))
+       Sphere([-3,0,-1], 1.0, mat: Lambertian(earthTexture)),
+       Sphere(sphereCenter, 1.0, mat: Dielectric(indexOfRefraction: ior)),
+       Sphere([0, -0.5, 2.25], 0.5, mat: Dielectric(indexOfRefraction: 1/ior)),
+       Sphere([0, -0.5, 2.25], 0.5, mat: Dielectric(indexOfRefraction: 1/ior))
+
 	]
     return objects
 }

@@ -18,7 +18,7 @@ struct Scene {
         self.objects = objects
 		self.cam = cam
         if export {
-            self.samplesPerPixel = 300
+            self.samplesPerPixel = 30
         } else {
             self.samplesPerPixel = 1
         }
